@@ -1,3 +1,5 @@
+from prettytable import PrettyTable
+
 admin = {"id 0": {"gebruikersnaam": "admin", "wachtwoord": "admin"}}
 
 personeelsleden = {"id 1": {"naam": "john", "geslacht": "man", "afdeling": "marketing", "jaar_in_dienst": 2010,
@@ -24,9 +26,12 @@ personeelsleden = {"id 1": {"naam": "john", "geslacht": "man", "afdeling": "mark
 
 def toon_leden():
     print("--------------------------------------------------")
-    print("ID", "\t\t", "Naam", "\t", "geslacht", "\t", "afdeling", "\t", "jaar in dienst", "maandloon")
-
-    print("--------------------------------------------------\n")
+    leden = PrettyTable(["ID", "Naam", "Geslacht", "Afdeling", "jaar in dienst", "loon"])
+    for id, lid in personeelsleden.items():
+        leden.add_row(
+            [id, lid["naam"], lid["geslacht"], lid["afdeling"], lid["jaar_in_dienst"], lid["maandloon"]])
+    print("--------------------------------------------------")
+    print("--------------------------------------------------")
 
     for id, gegevens in personeelsleden.items():
         print(id, end="\t")
@@ -43,7 +48,9 @@ def admin_login():
         while not wachtwoord == lid["wachtwoord"] or not gebruikersnaam == lid['gebruikersnaam']:
             gebruikersnaam = input("Foutieve invoer! \n\n Geef je gebruikersnaam opnieuw in als admin:")
             wachtwoord = input("Geef je wachtwoord in")
-    print("\n\n\t\t\t\tLOGIN SUCCEEDED\n")
+    print("-------------------------------------------------------------------------------------------------------------")
+    print("\n\n\t\t\t\t\t\t\t\t\t\t\t\tADMIN LOGIN SUCCEEDED\n")
+    print("-------------------------------------------------------------------------------------------------------------")
     admin_functies()
 
 
@@ -70,14 +77,14 @@ def admin_functies():
 
 
 def voeg_lid_toe_hulp():
-    id = "id  " + str(len(personeelsleden) + 1)
+    id = "id " + str(len(personeelsleden) + 1)
     naam = input("Geef de naam van het personeelslid?")
     geslacht = input("Wat is zijn / haar geslacht?")
-    afdeling = input("Wat is zijn afdeling?")
-    jaar_in_dienst = input("in welk jaar is hij in dienst gekomen?")
-    maandloon = input("Wat is zijn maandloon")
+    afdeling = input(f"In welke afdeling werkt {naam.title()}?")
+    jaar_in_dienst = input(f"in welk jaar is {naam.title()} in dienst gekomen?")
+    maandloon = input(f"Wat is het maandloon van {naam.title()}?")
     personeelsleden.update({id: {"naam": naam, "geslacht": geslacht, "afdeling": afdeling,
-                                 "jaar_in_dienst": jaar_in_dienst, "maandloon": maandloon}})
+                              "jaar_in_dienst": jaar_in_dienst, "maandloon": maandloon}})
 
 
 def voeg_personeelslid_toe():
@@ -107,8 +114,11 @@ def verwijder_personeelslid():
 
 def verhoog_loon_personeelslid():
     toon_leden()
-    id = input("Geef het id van de personeelslid waar je zijn loon wil toevoegen:")
-    maandloon = input("Welke maandloon wil je deze medewerker geven?")
+    id = input("Geef het id van de personeelslid die je zijn / haar loon wil verhogen:")
+    while id not in personeelsleden:
+        print("Foutieve ID, probeer opnieuw")
+        id = input("Geef het id van de personeelslid waar je zijn / haar loon wil toevoegen:")
+    maandloon = input("Welke maandloon wil je deze lid geven?")
     id_personeel = "id " + str(id)
     personeelsleden[id_personeel]["maandloon"] = maandloon
     toon_leden()
@@ -116,7 +126,7 @@ def verhoog_loon_personeelslid():
 
 
 def verhoog_loon_iedereen():
-    verhogen = int(input("Met hoeveel wil iedereen hun maandloon verhogen?"))
+    verhogen = int(input("Met hoeveel wil je iedereen hun maandloon verhogen?"))
     for personeel in personeelsleden.values():
         personeel["maandloon"] = personeel["maandloon"] + verhogen
     toon_leden()
@@ -182,7 +192,7 @@ def afdeling():
 
 def maandloon_vergelijking():
     maandloon_vergelijken = int(input(
-        "Geef een maandloon in en er wordt een overzicht gegeven van iedereen die meer verdient"))
+        "Geef een maandloon in (vb: 2500) en er wordt een overzicht gegeven van iedereen die meer verdient"))
     for id, lid in personeelsleden.items():
         if maandloon_vergelijken < lid['maandloon']:
             lid.update({"id": {"naam": lid, "geslacht": lid, "afdeling": lid, "jaar_in_dienst": lid, "maandloon": lid}})
@@ -193,7 +203,7 @@ def maandloon_vergelijking():
 
 
 def langer_in_dienst():
-    jaar_in_dienst = int(input("Geef een jaar in waarvan je wil weten welke personeelslid er langer werkt"))
+    jaar_in_dienst = int(input("Geef een jaar in waarvan je wil weten welke personeelslid er langer dan dat jaar werkt"))
     for id, lid in personeelsleden.items():
         if jaar_in_dienst > lid['jaar_in_dienst']:
             lid.update({"id": {"naam": lid, "geslacht": lid, "afdeling": lid, "jaar_in_dienst": lid, "maandloon": lid}})
