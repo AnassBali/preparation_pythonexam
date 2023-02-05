@@ -25,20 +25,11 @@ personeelsleden = {"id 1": {"naam": "john", "geslacht": "man", "afdeling": "mark
 
 
 def toon_leden():
-    print("--------------------------------------------------")
     leden = PrettyTable(["ID", "Naam", "Geslacht", "Afdeling", "jaar in dienst", "loon"])
     for id, lid in personeelsleden.items():
         leden.add_row(
             [id, lid["naam"], lid["geslacht"], lid["afdeling"], lid["jaar_in_dienst"], lid["maandloon"]])
-    print("--------------------------------------------------")
-    print("--------------------------------------------------")
-
-    for id, gegevens in personeelsleden.items():
-        print(id, end="\t")
-        for info in gegevens.values():
-            print(info, end="\t\t")
-        print("")
-    print("--------------------------------------------------")
+    print(leden)
 
 
 def admin_login():
@@ -49,7 +40,7 @@ def admin_login():
             gebruikersnaam = input("Foutieve invoer! \n\n Geef je gebruikersnaam opnieuw in als admin:")
             wachtwoord = input("Geef je wachtwoord in")
     print("-----------------------------------------------------------------------------------------------------------")
-    print("\n\n\t\t\t\t\t\t\t\t\t\t\t\t\nADMIN LOGIN SUCCEEDED\n")
+    print("ADMIN LOGIN SUCCEEDED\n")
     for id, lid in admin.items():
         Gebruikersnaam = lid['gebruikersnaam']
         text = lid['wachtwoord']
@@ -58,27 +49,37 @@ def admin_login():
     print("Wachtwoord (encrypted): " + encrypt(text, s))
     encrypt("admin", 4)
     print("-----------------------------------------------------------------------------------------------------------")
-    admin_functies()
+
+
+def filter_of_adminfuncties():
+    optie = input("Typ 1 voor admin functies of typ 2 voor te filteren")
+    if optie == "1":
+        admin_functies()
+    elif optie == "2":
+        filter_admin()
+    else:
+        print("Foutieve invoer!")
+        filter_of_adminfuncties()
 
 
 def admin_functies():
-    print(
-        "U kunt kiezen tussen deze functies voor de personeelsleden:\n1 Personeel toevoegen \t - \t Meerdere "
-        "personeel toevoegen \t - \tpersoneel verwijderen \t - \t loonsverhoging personeel \t - \t verhoog alle lonen "
-        "")
+    print("-----------------------------------------------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------------------------------------------")
     functies = input(
-        "\n\ntyp:\n\n1 personeel toevoegen\nmeerdere personeel toevoegen\npersoneel verwijderen\nloonsverhoging 1 "
-        "personeel\nloonsverhoging alle personeelsleden\n")
-    if functies == '1 personeel toevoegen':
+        "0: Toon filter\n1: Personeel Toevoegen\n2: Meerdere personeel toevoegen\n3: Personeel verwijderen\n4: "
+        "Loonsverhoging 1 personeel\n5: Loonsverhoging alle personeelsleden ")
+    if functies == "1":
         voeg_personeelslid_toe()
-    elif functies == 'meerdere personeel toevoegen':
+    elif functies == "2":
         voeg_meerdere_leden_toe()
-    elif functies == 'personeel verwijderen':
+    elif functies == "3":
         verwijder_personeelslid()
-    elif functies == 'loonsverhoging 1 personeel':
+    elif functies == "4":
         verhoog_loon_personeelslid()
-    elif functies == 'loonsverhoging alle personeelsleden':
+    elif functies == "5":
         verhoog_loon_iedereen()
+    elif functies == "0":
+        filter_admin()
     else:
         print("Foutieve invoer"), admin_functies()
 
@@ -122,22 +123,22 @@ def verwijder_personeelslid():
 def verhoog_loon_personeelslid():
     toon_leden()
     id = input("Geef het id van de personeelslid die je zijn / haar loon wil verhogen:")
-    while id not in personeelsleden:
+    id_personeel = "id " + str(id)
+    while id_personeel not in personeelsleden:
         print("Foutieve ID, probeer opnieuw")
         id = input("Geef het id van de personeelslid waar je zijn / haar loon wil toevoegen:")
     maandloon = input("Welke maandloon wil je deze lid geven?")
-    id_personeel = "id " + str(id)
     personeelsleden[id_personeel]["maandloon"] = maandloon
     toon_leden()
-    admin_login()
+    admin_functies()
 
 
 def verhoog_loon_iedereen():
     verhogen = int(input("Met hoeveel wil je iedereen hun maandloon verhogen?"))
-    for personeel in personeelsleden.values():
-        personeel["maandloon"] = personeel["maandloon"] + verhogen
+    for id, lid in personeelsleden.items():
+        lid["maandloon"] += verhogen
     toon_leden()
-    admin_login()
+    admin_functies()
 
 
 def encrypt(text, s):
@@ -155,32 +156,56 @@ def encrypt(text, s):
 
 
 def filter_admin():
-    mannen_en_vrouwen()
-    afdeling()
-    maandloon_vergelijking()
-    langer_in_dienst()
+    print("-----------------------------------------------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------------------------------------------")
+    functies = input(
+        "0: Ga terug naar admin functies\n1: Filter man / vrouw\n2: Filter op afdeling\n3: Maandloon\n4: "
+        "Vergelijking jaar in dienst")
+    if functies == "1":
+        mannen_en_vrouwen()
+    elif functies == "2":
+        afdeling()
+    elif functies == "3":
+        maandloon_vergelijking()
+    elif functies == "4":
+        langer_in_dienst()
+    elif functies == "0":
+        admin_functies()
+    else:
+        print("Foutieve invoer"), filter_admin()
 
 
 def mannen_en_vrouwen():
     geslacht = input("Wilt u alle mannen of vrouwen zien? (man / vrouw)")
-    for id, lid in personeelsleden.items():
-        if lid["geslacht"] == geslacht:
-            lid.update({"id": {"naam": lid, "geslacht": lid, "afdeling": lid, "jaar_in_dienst": lid, "maandloon": lid}})
-            print(id, end="\t")
-            for info in lid.values():
-                print(info, end="\t\t")
-            print("")
+    if geslacht.lower() == "man" or geslacht.lower() == "vrouw":
+        for id, lid in personeelsleden.items():
+            if lid["geslacht"] == geslacht:
+                lid.update({"id": {"naam": lid, "geslacht": lid, "afdeling": lid, "jaar_in_dienst": lid, "maandloon": lid}})
+                print(id, end="\t")
+                for info in lid.values():
+                    print(info, end="\t\t")
+                print("")
+    else:
+        print("Foutieve invoer")
+        mannen_en_vrouwen()
+
+    filter_admin()
 
 
 def afdeling():
-    afdeling = input("Welke afdeling wilt u bekijken?")
-    for id, lid in personeelsleden.items():
-        if lid["afdeling"] == afdeling:
-            lid.update({"id": {"naam": lid, "geslacht": lid, "afdeling": lid, "jaar_in_dienst": lid, "maandloon": lid}})
-            print(id, end="\t")
-            for info in lid.values():
-                print(info, end="\t\t")
-            print("")
+    afdeling_keuze = input("Welke afdeling wilt u bekijken?")
+    if afdeling_keuze.lower() == 'sales' or afdeling_keuze.lower() == 'marketing' or afdeling_keuze.lower() == 'developer':
+        for id, lid in personeelsleden.items():
+            if lid["afdeling"] == afdeling_keuze:
+                lid.update({"id": {"naam": lid, "geslacht": lid, "afdeling": lid, "jaar_in_dienst": lid, "maandloon": lid}})
+                print(id, end="\t")
+                for info in lid.values():
+                    print(info, end="\t\t")
+                print("")
+    else:
+        print("Foutieve invoer")
+        afdeling()
+    filter_admin()
 
 
 def maandloon_vergelijking():
@@ -193,6 +218,7 @@ def maandloon_vergelijking():
             for info in lid.values():
                 print(info, end="\t\t")
             print("")
+    filter_admin()
 
 
 def langer_in_dienst():
@@ -205,9 +231,9 @@ def langer_in_dienst():
             for info in lid.values():
                 print(info, end="\t\t")
             print("")
+    filter_admin()
 
 
 toon_leden()
 admin_login()
-encrypt()
-filter_admin()
+filter_of_adminfuncties()
