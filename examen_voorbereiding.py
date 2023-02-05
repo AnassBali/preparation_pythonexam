@@ -48,9 +48,16 @@ def admin_login():
         while not wachtwoord == lid["wachtwoord"] or not gebruikersnaam == lid['gebruikersnaam']:
             gebruikersnaam = input("Foutieve invoer! \n\n Geef je gebruikersnaam opnieuw in als admin:")
             wachtwoord = input("Geef je wachtwoord in")
-    print("-------------------------------------------------------------------------------------------------------------")
-    print("\n\n\t\t\t\t\t\t\t\t\t\t\t\tADMIN LOGIN SUCCEEDED\n")
-    print("-------------------------------------------------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------------------------------------------")
+    print("\n\n\t\t\t\t\t\t\t\t\t\t\t\t\nADMIN LOGIN SUCCEEDED\n")
+    for id, lid in admin.items():
+        Gebruikersnaam = lid['gebruikersnaam']
+        text = lid['wachtwoord']
+        s = 4
+    print("Gebruikersnaam: " + Gebruikersnaam)
+    print("Wachtwoord (encrypted): " + encrypt(text, s))
+    encrypt("admin", 4)
+    print("-----------------------------------------------------------------------------------------------------------")
     admin_functies()
 
 
@@ -84,7 +91,7 @@ def voeg_lid_toe_hulp():
     jaar_in_dienst = input(f"in welk jaar is {naam.title()} in dienst gekomen?")
     maandloon = input(f"Wat is het maandloon van {naam.title()}?")
     personeelsleden.update({id: {"naam": naam, "geslacht": geslacht, "afdeling": afdeling,
-                              "jaar_in_dienst": jaar_in_dienst, "maandloon": maandloon}})
+                                 "jaar_in_dienst": jaar_in_dienst, "maandloon": maandloon}})
 
 
 def voeg_personeelslid_toe():
@@ -139,26 +146,12 @@ def encrypt(text, s):
     # traverse text
     for i in range(len(text)):
         char = text[i]
-
-        # Encrypt uppercase characters
-        if (char.isupper()):
+        if char.isupper():
             result += chr((ord(char) + s - 65) % 26 + 65)
-
-        # Encrypt lowercase characters
         else:
             result += chr((ord(char) + s - 97) % 26 + 97)
 
     return result
-
-
-for id, lid in admin.items():
-    Gebruikersnaam = lid['gebruikersnaam']
-    text = lid['wachtwoord']
-    s = 4
-    print("Gebruikersnaam: " + Gebruikersnaam)
-    print("Shift : " + str(s))
-    print("Wachtwoord encrypted: " + encrypt(text, s))
-    print("Wachtwoord decrypted  : " + text)
 
 
 def filter_admin():
@@ -203,7 +196,8 @@ def maandloon_vergelijking():
 
 
 def langer_in_dienst():
-    jaar_in_dienst = int(input("Geef een jaar in waarvan je wil weten welke personeelslid er langer dan dat jaar werkt"))
+    jaar_in_dienst = int(
+        input("Geef een jaar in waarvan je wil weten welke personeelslid er langer dan dat jaar werkt"))
     for id, lid in personeelsleden.items():
         if jaar_in_dienst > lid['jaar_in_dienst']:
             lid.update({"id": {"naam": lid, "geslacht": lid, "afdeling": lid, "jaar_in_dienst": lid, "maandloon": lid}})
@@ -213,7 +207,7 @@ def langer_in_dienst():
             print("")
 
 
-encrypt("admin", 4)
 toon_leden()
 admin_login()
+encrypt()
 filter_admin()
