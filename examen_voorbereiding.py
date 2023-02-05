@@ -71,7 +71,7 @@ def admin_functies():
     print("-----------------------------------------------------------------------------------------------------------")
     functies = input(
         "0: Toon filter\n1: Personeel Toevoegen\n2: Meerdere personeel toevoegen\n3: Personeel verwijderen\n4: "
-        "Loonsverhoging 1 personeel\n5: Loonsverhoging alle personeelsleden ")
+        "Loonsverhoging 1 personeel\n5: Loonsverhoging alle personeelsleden\n\n ")
     if functies == "1":
         voeg_personeelslid_toe()
     elif functies == "2":
