@@ -60,7 +60,7 @@ def admin_login():
 
 def admin_functions_or_filter():
     Fore.RESET
-    option = input("Choose from:\n1: Admin Functions\n2: Filter system\n")
+    option = input("Choose a number:\n1: Admin Functions\n2: Filter system\n")
     if option == "1":
         admin_functions()
     elif option == "2":
