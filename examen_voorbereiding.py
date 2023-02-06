@@ -39,7 +39,7 @@ def admin_login():
     password = input("Enter your password:")
     for id, employer in admin.items():
         while not password == employer["password"] or not username == employer['username']:
-            print(Fore.RED,"\nIncorrect input!", Fore.RESET)
+            print(Fore.RED, "\nIncorrect login credentials!", Fore.RESET)
             username = input("\n\nEnter your username again as admin:")
             password = input("Enter your password:")
     print(Fore.BLACK)
@@ -55,18 +55,19 @@ def admin_login():
     print("\t\t\t\t\t\t\t\t\t\t\t\tPassword (encrypted): " + encrypt(text, s))
     encrypt("admin", 4)
     print(Fore.BLACK, "------------------------------------------------------------------------------------------------"
-                      "-----------", Fore.GREEN)
+                      "-----------", Fore.LIGHTGREEN_EX)
 
 
 def admin_functions_or_filter():
-    Fore.RESET
-    option = input("Choose a number:\n1: Admin Functions\n2: Filter system\n")
+    print("Welcome to the admin panel!\n", Fore.GREEN, "\n1: Admin Functions\n2: Filter system\n"
+          , Fore.RESET)
+    option = input("Enter a number: ")
     if option == "1":
         admin_functions()
     elif option == "2":
         filter_admin()
     else:
-        print(Fore.RED, "Incorrect input!")
+        print(Fore.RED, "\nIncorrect input!", Fore.RESET)
         admin_functions_or_filter()
 
 
@@ -78,11 +79,13 @@ def admin_functions():
     print("\t\t\t\t\t\t\t\t\t\t\tWelcome to the Admin Functions!")
     print("-----------------------------------------------------------------------------------------------------------")
     print("-----------------------------------------------------------------------------------------------------------",
-          Fore.BLACK)
-    functions = input(
-        "0: Show filter\n1: Add employer \n2: Add multiple employers\n3: Delete employer\n4: "
-        "Raise salary employer\n5: Raise salary all employers\n\n ")
+          Fore.LIGHTGREEN_EX)
+    print("Choose a function:", Fore.BLACK)
+    print(
+        "\n0: Go back to filter\n1: Add employer \n2: Add multiple employers\n3: Delete employer\n4: "
+        "Raise salary employer\n5: Raise salary all employers\n", Fore.RESET)
     print(Fore.RESET)
+    functions = input("Enter a number: ")
     if functions == "1":
         add_employer()
     elif functions == "2":
@@ -189,10 +192,14 @@ def filter_admin():
     print("\t\t\t\t\t\t\t\t\t\t\tWelcome to the filter system!")
     print("-----------------------------------------------------------------------------------------------------------")
     print("-----------------------------------------------------------------------------------------------------------",
-          Fore.BLACK)
-    functions = input(
-        "0: Go back to admin functions\n1: Filter man / woman\n2: Filter by department\n3: Monthly salary\n4: "
-        "Service year comparison")
+          Fore.LIGHTBLUE_EX)
+    print("Choose a filter:", Fore.BLACK)
+    print(
+        "\n0: Go back to admin functions\n1: Filter man / woman\n2: Filter by department\n3: Monthly "
+        "salary\n4: "
+        "Service year comparison\n", Fore.RESET)
+    functions = input("Enter a number: ")
+    print(Fore.RESET)
     if functions == "1":
         men_and_women()
     elif functions == "2":
