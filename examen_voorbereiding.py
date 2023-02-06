@@ -156,7 +156,7 @@ def increase_employee_salary():
     monthly_salary = int(input(f"How much would you like to increase for id {id}?"))
     employers[id_employee]["salary"] += monthly_salary
     show_employers()
-    print(Fore.GREEN, f"\nID {id} his salary got successfully increased! \n", Fore.RESET)
+    print(Fore.GREEN, f"\nThe salary of ID {id} got successfully increased! \n", Fore.RESET)
     admin_functions()
 
 
